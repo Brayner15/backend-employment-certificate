@@ -6,3 +6,5 @@ services:
       context: .
     ports:
       - "8500:80"
+    volumes:
+      - ./src:/code
