@@ -1,10 +1,45 @@
-version: '3'
+# docker-compose.yml
+version: '3.8'
 
 services:
   fastapi:
     build:
       context: .
     ports:
-      - "8500:80"
+      - "8000:8000"
     volumes:
       - ./src:/code
+    environment:
+      - DATABASE_URL=mysql+pymysql://root:root@db:3306/bd_fastapi
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bd_fastapi
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mariadb", "-u", "root", "-proot", "-e", "SELECT 1;"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:

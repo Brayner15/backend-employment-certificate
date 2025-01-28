@@ -1,24 +1,35 @@
-from fastapi.responses import JSONResponse
+# app/routers/create_pdf_analytics.py
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.responses import Response
+from sqlalchemy.orm import Session
+from app.utils.db import get_db
 from app.services.generate_pdf_service import create_pdf_service
-
-from fastapi import APIRouter, FastAPI, Form, Body
-
-import fitz
-from fastapi import APIRouter, HTTPException
+from app.routers.auth import get_current_user
+from pydantic import BaseModel
 
 router = APIRouter()
 
-@router.post("/generate_pdf_report")
-async def generate_pdf_report(data: dict):
-    try:
+class PDFRequest(BaseModel):
+    user_id: int
 
-        status = create_pdf_service(data)
-        response = {
-            "status": status,
-            "data": {
-                'msg': 'OK' if True else 'ERROR'
+@router.post("/generate_pdf_report")
+async def generate_pdf_report(
+    request: PDFRequest,
+    db: Session = Depends(get_db)
+):
+    try:
+        pdf_content, filename = create_pdf_service(db, request.user_id)
+        
+        return Response(
+            content=pdf_content,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"'
             }
-        }
-        return JSONResponse(content=response)
+        )
+        
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al generar el informe PDF: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error al generar el informe PDF: {str(e)}"
+        )
