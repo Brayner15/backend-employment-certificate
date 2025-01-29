@@ -40,7 +40,21 @@ def create_pdf_service(db: Session, user_id: int) -> tuple[bytes, str]:
         
         # Crear el contenido del certificado
         text = f"""
+
+
+
+
+        Logo de la empresa
+        Nombre de la empresa
+        Dirección de la empresa
+
+
+        
+
+
                                 CERTIFICADO LABORAL
+
+
 
 
         Certifica que:
@@ -51,10 +65,17 @@ def create_pdf_service(db: Session, user_id: int) -> tuple[bytes, str]:
         con un contrato a término {employment.contract_type} y con un salario básico 
         de {format_currency(employment.salary)}.
 
+
+
+
         Este certificado se expide el {current_date}
 
 
+
+
         Cordialmente,
+
+
 
 
 
@@ -64,10 +85,10 @@ def create_pdf_service(db: Session, user_id: int) -> tuple[bytes, str]:
 
         # Agregar el texto al PDF con formato
         page.insert_text(
-            (102, 72),  # Posición inicial
+            (80, 72),  # Posición inicial
             text,
             fontname="helv",  # Fuente
-            fontsize=11,  # Tamaño de fuente
+            fontsize=12,  # Tamaño de fuente
             color=(0, 0, 0)  # Color negro
         )
 
