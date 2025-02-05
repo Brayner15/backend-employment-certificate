@@ -22,7 +22,7 @@ services:
       MYSQL_DATABASE: bd_fastapi
       MYSQL_ROOT_HOST: '%'
     # Cambiar puerto para evitar conflictos
-    expose:
+    ports:
       - "3306"
     volumes:
       - db_data:/var/lib/mysql
