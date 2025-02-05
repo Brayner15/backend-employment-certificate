@@ -8,10 +8,13 @@ app = FastAPI()
 # Configuración de CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # URL del frontend
-    allow_credentials=True,  # Importante para las cookies
-    allow_methods=["*"],    # Permite todos los métodos HTTP
-    allow_headers=["*"],    # Permite todas las cabeceras
+    allow_origins=[
+        "http://localhost:5173",   # Para desarrollo local
+        "http://3.22.51.141"       # IP pública en AWS (ajusta según tu caso)
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.on_event("startup")
