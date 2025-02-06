@@ -10,7 +10,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",   # Para desarrollo local
-        "http://3.22.51.141"       # IP pública en AWS (ajusta según tu caso)
+        "http://3.144.115.3"       # IP pública en AWS (ajusta según tu caso)
     ],
     allow_credentials=True,
     allow_methods=["*"],
